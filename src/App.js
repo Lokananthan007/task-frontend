@@ -13,6 +13,7 @@ function App() {
     gender: '',
     city: '',
     profileImage: '',
+    document: '',
     agreeTerms: false,
   });
 
@@ -23,6 +24,14 @@ function App() {
     setFormData((prevData) => ({
       ...prevData,
       profileImage: imageFile,
+    }));
+  };
+
+  const handleDocumentChange = (e) => {
+    const documentFile = e.target.files[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      document: documentFile,
     }));
   };
 
@@ -49,8 +58,6 @@ function App() {
           formDataWithImage.append(key, value);
         });
 
-        console.log("FormData:", formDataWithImage);
-
         const response = await axios.post('http://localhost:4455/user', formDataWithImage, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -69,6 +76,7 @@ function App() {
             gender: '',
             city: '',
             profileImage: '',
+            document: '',
             agreeTerms: false,
           });
         } else {
@@ -172,6 +180,10 @@ function App() {
         <br/>
         <label className="label">Profile Image:</label><br />
         <input type="file" name="profileImage" onChange={handleImageChange} />
+        <br/>
+
+        <label className="label">Document:</label><br />
+        <input type="file" name="pdf" onChange={handleDocumentChange} />
         <br/>
 
         <input type="checkbox" name="agreeTerms" checked={formData.agreeTerms} onChange={handleInputChange} /> I agree to the terms and conditions <br/>
