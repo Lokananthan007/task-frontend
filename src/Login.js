@@ -1,40 +1,41 @@
-// Login.js
 import React, { useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoIosLock } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+  const [loginError, setLoginError] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // Implement your login API call here
     try {
+      // Replace the following with your actual API endpoint and logic
       const response = await fetch('http://localhost:4455/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ name, password }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Login failed:', errorData.error || 'Unknown error');
+      const data = await response.json();
+
+      if (response.ok) {
+        // Login successful
+        localStorage.setItem('token', data.token);
+        navigate('/dashbord'); // Use navigate for programmatic navigation
       } else {
-        console.log('Login successful');
+        // Login failed
+        setLoginError('Invalid credentials');
       }
     } catch (error) {
       console.error('Error during login:', error);
+      setLoginError('Internal Server Error');
     }
   };
 
@@ -48,12 +49,12 @@ const Login = () => {
         <hr></hr>
         <label>
           <FaRegUser className="me-1" />
-          Username:<br />
+          Name:<br />
           <input
             type="text"
-            value={username}
-            onChange={handleUsernameChange}
-            placeholder="Username"
+            placeholder="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </label>
         <br />
@@ -62,9 +63,9 @@ const Login = () => {
           <IoIosLock /> Password:<br />
           <input
             type="password"
-            value={password}
-            onChange={handlePasswordChange}
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </label>
         <br />
@@ -72,6 +73,8 @@ const Login = () => {
         <button type="submit" className="btn">
           Login
         </button>
+
+        {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
       </form>
     </div>
   );
