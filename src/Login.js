@@ -12,9 +12,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Implement your login API call here
     try {
-      // Replace the following with your actual API endpoint and logic
       const response = await fetch('http://localhost:4455/user/login', {
         method: 'POST',
         headers: {
@@ -26,12 +24,12 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Login successful
         localStorage.setItem('token', data.token);
-        navigate('/dashbord'); // Use navigate for programmatic navigation
+        localStorage.setItem('username', name); 
+        alert('Login successful');
+        navigate('dashboard');
       } else {
-        // Login failed
-        setLoginError('Invalid credentials');
+        setLoginError('Invalid username or password');
       }
     } catch (error) {
       console.error('Error during login:', error);

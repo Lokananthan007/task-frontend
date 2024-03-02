@@ -1,8 +1,10 @@
 
 function Dashboard (){
+    const username = localStorage.getItem('username');
+
     return(
         <div>
-            <h1>Wellcome to Dashboard</h1>
+            <h1 style={{textAlign:'center',paddingTop:'20%',fontSize:'50px' }}>Welcome to Dashboard, {username}!</h1>
         </div>
     )
 }
